@@ -8,7 +8,7 @@ RUN apt -y install build-essential git protobuf-compiler golang python3 cmake wg
 RUN curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
 RUN mv bazel.gpg /etc/apt/trusted.gpg.d/
 RUN echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list
-RUN apt -y update && apt -y install bazel bazel-3.2.0
+RUN apt -y update && apt -y install bazel bazel-3.7.0
 
 ENV RUSTUP_HOME=/usr/local/rustup
 ENV CARGO_HOME=/usr/local/cargo
@@ -51,8 +51,6 @@ COPY ./scripts/minimal.yaml /root/multinet/repo
 WORKDIR /root/multinet/repo
 
 FROM multinet-tools as multinet-prysm
-
-RUN apt install bazel-3.7.0
 
 COPY ./scripts/build_prysm.sh /root/multinet/repo
 RUN ["/bin/bash", "build_prysm.sh"]
