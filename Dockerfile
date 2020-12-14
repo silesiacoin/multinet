@@ -50,30 +50,6 @@ COPY ./scripts/minimal.yaml /root/multinet/repo
 
 WORKDIR /root/multinet/repo
 
-FROM multinet-tools as multinet-nimbus
-
-COPY ./scripts/build_genesis.sh /root/multinet/repo
-RUN ["/bin/bash", "build_genesis.sh"]
-
-COPY ./scripts/build_nimbus.sh /root/multinet/repo
-RUN ["/bin/bash", "build_nimbus.sh"]
-
-COPY ./scripts/run_nimbus.sh /root/multinet/repo
-RUN chmod +x /root/multinet/repo/run_nimbus.sh
-
-COPY ./scripts/make_genesis.sh /root/multinet/repo
-RUN chmod +x /root/multinet/repo/make_genesis.sh
-
-COPY ./scripts/wait_for.sh /root/multinet/repo
-
-FROM multinet-tools as multinet-lighthouse
-
-COPY ./scripts/build_lighthouse.sh /root/multinet/repo
-RUN ["/bin/bash", "build_lighthouse.sh"]
-COPY ./scripts/run_lighthouse.sh /root/multinet/repo
-
-COPY ./scripts/wait_for.sh /root/multinet/repo
-
 FROM multinet-tools as multinet-prysm
 
 RUN apt install bazel-3.7.0
@@ -81,5 +57,7 @@ RUN apt install bazel-3.7.0
 COPY ./scripts/build_prysm.sh /root/multinet/repo
 RUN ["/bin/bash", "build_prysm.sh"]
 COPY ./scripts/run_prysm.sh /root/multinet/repo
+RUN chmod +x /root/multinet/repo/run_prysm.sh
 
 COPY ./scripts/wait_for.sh /root/multinet/repo
+RUN chmod +x /root/multinet/repo/wait_for.sh
