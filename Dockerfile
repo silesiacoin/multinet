@@ -76,6 +76,8 @@ COPY ./scripts/wait_for.sh /root/multinet/repo
 
 FROM multinet-tools as multinet-prysm
 
+RUN apt install bazel-3.7.0
+
 COPY ./scripts/build_prysm.sh /root/multinet/repo
 RUN ["/bin/bash", "build_prysm.sh"]
 COPY ./scripts/run_prysm.sh /root/multinet/repo

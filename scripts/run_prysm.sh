@@ -52,6 +52,5 @@ bazel run //validator --define=ssz=$SPEC_VERSION -- \
   --chain-config-file=$TESTNET_DIR/config.yaml \
   --disable-accounts-v2=true \
   --verbosity=debug \
-  --password="" \
   --keymanager=wallet \
   --keymanageropts=$PRY_DATADIR/prysm/keymanager_opts.json
