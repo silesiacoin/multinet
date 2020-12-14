@@ -52,3 +52,4 @@ bazel run //validator --define=ssz=$SPEC_VERSION -- \
   --chain-config-file=$TESTNET_DIR/config.yaml \
   --disable-accounts-v2=true \
   --verbosity=debug \
+  --accept-terms-of-use
