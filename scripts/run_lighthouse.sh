@@ -52,26 +52,11 @@ target/release/lighthouse \
 	--datadir $LH_DATADIR \
   --testnet-dir $TESTNET_DIR \
   --dummy-eth1 \
-  --spec $SPEC_VERSION \
+  --network $SPEC_VERSION \
   --http-address "0.0.0.0" \
   --http-port 5052 \
   --port 50001 \
   --enr-address $MULTINET_POD_NAME \
   --enr-udp-port 50001 \
   --http \
-  $BOOTNODES_ARG &
-
-sleep 5
-
-# validator client
-target/release/lighthouse \
-  vc \
-	--debug-level debug \
-  --spec $SPEC_VERSION \
-	--datadir $LH_VALIDATORS_DIR \
-	--secrets-dir $LH_SECRETS_DIR \
-	--testnet-dir $TESTNET_DIR \
-	--auto-register \
-  --allow-unsynced
-
-set +x
+  $BOOTNODES_ARG
