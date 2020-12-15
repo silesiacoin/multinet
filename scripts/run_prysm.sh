@@ -43,6 +43,6 @@ bazel run //beacon-chain --define=ssz=$SPEC_VERSION -- \
   --verbosity=debug \
   --interop-eth1data-votes \
   --chain-config-file=$TESTNET_DIR/config.yaml \
-  --deposit-contract=0x8A04d14125D0FDCDc742F4A05C051De07232EDa4 \
+  --deposit-contract=0x00000000219ab540356cBB839Cbe05303d7705Fa \
   --interop-genesis-state=$TESTNET_DIR/genesis.ssz \
   --accept-terms-of-use
