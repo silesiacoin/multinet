@@ -26,7 +26,7 @@ spec:
             claimName: common-data
       containers:
         - name: prysm
-          image: silesiacoin/multinet-prysm:v3
+          image: silesiacoin/multinet-prysm:v4
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - mountPath: /root/multinet/repo/deposits
