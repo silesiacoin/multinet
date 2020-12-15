@@ -52,7 +52,6 @@ target/release/lighthouse \
 	--datadir $LH_DATADIR \
   --testnet-dir $TESTNET_DIR \
   --dummy-eth1 \
-  --network $SPEC_VERSION \
   --http-address "0.0.0.0" \
   --http-port 5052 \
   --port 50001 \
