@@ -39,6 +39,7 @@ bazel run //beacon-chain --define=ssz=$SPEC_VERSION -- \
   --pprof \
   --rpc-host=0.0.0.0 \
   --rpc-port=4000 \
+  --http-web3provider=http://34.78.227.45:8545/ \
   --verbosity=debug \
   --interop-eth1data-votes \
   --chain-config-file=$TESTNET_DIR/config.yaml \
@@ -52,4 +53,5 @@ bazel run //validator --define=ssz=$SPEC_VERSION -- \
   --chain-config-file=$TESTNET_DIR/config.yaml \
   --disable-accounts-v2=true \
   --verbosity=debug \
-  --accept-terms-of-use
+  --accept-terms-of-use \
+  --wallet-dir=$PRY_DATADIR/prysm/wallets
