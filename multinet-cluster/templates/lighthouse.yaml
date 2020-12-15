@@ -28,7 +28,7 @@ spec:
             readOnly: false
       containers:
         - name: lighthouse
-          image: eth2clients/multinet-lighthouse
+          image: silesiacoin/multinet-lighthouse:v1
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - mountPath: /root/multinet/repo/deposits
@@ -63,4 +63,3 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-      
