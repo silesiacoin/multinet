@@ -28,7 +28,7 @@ spec:
             readOnly: false
       containers:
         - name: lighthouse
-          image: silesiacoin/multinet-lighthouse:v3
+          image: silesiacoin/multinet-lighthouse:v5
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - mountPath: /root/multinet/repo/deposits
