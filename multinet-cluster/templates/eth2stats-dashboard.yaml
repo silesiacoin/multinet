@@ -17,6 +17,7 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
+        - containerPort: 89
         volumeMounts:
         - mountPath: /usr/share/nginx/html/config/config.json
           name: cfgmap
