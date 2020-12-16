@@ -50,7 +50,7 @@ target/release/lighthouse \
   bn \
 	--debug-level debug \
 	--datadir $LH_DATADIR \
-  --network $TESTNET_DIR \
+  --network mainnet \
   --dummy-eth1 \
   --http-address "0.0.0.0" \
   --http-port 5052 \
