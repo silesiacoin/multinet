@@ -118,6 +118,13 @@ Example of exposure:
 
 What is problematic is the config of ethstats.
 
+### Prysm validator build
+
+1. Build `multinet-prysm` by using dockerfile from project root.
+2. Push tagged image (e.g. `silesiacoin/multinet-prysm:v8`) to the silesiacoin docker hub.
+3. Change `image` to latest one inside `multinet-cluster/templates/prysm.yaml` template (`image: silesiacoin/multinet-prysm:v7`)
+4. Run `helm upgrade` command - you can delete prysm pod to be sure about the latest image contribution.
+
 # License
 
 CC0 (Creative Common Zero)
