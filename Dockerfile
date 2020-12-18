@@ -5,10 +5,10 @@ RUN apt -y update
 RUN apt -y install tzdata
 RUN apt -y install build-essential git protobuf-compiler golang python3 cmake wget curl gnupg jq
 
-RUN curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
-RUN mv bazel.gpg /etc/apt/trusted.gpg.d/
-RUN echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list
-RUN apt -y update && apt -y install bazel bazel-3.2.0
+#RUN curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
+#RUN mv bazel.gpg /etc/apt/trusted.gpg.d/
+#RUN echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list
+#RUN apt -y update && apt -y install bazel bazel-3.2.0
 
 ENV RUSTUP_HOME=/usr/local/rustup
 ENV CARGO_HOME=/usr/local/cargo
@@ -66,18 +66,18 @@ RUN chmod +x /root/multinet/repo/make_genesis.sh
 
 COPY ./scripts/wait_for.sh /root/multinet/repo
 
-FROM multinet-tools as multinet-lighthouse
+#FROM multinet-tools as multinet-lighthouse
+#
+#COPY ./scripts/build_lighthouse.sh /root/multinet/repo
+#RUN ["/bin/bash", "build_lighthouse.sh"]
+#COPY ./scripts/run_lighthouse.sh /root/multinet/repo
+#
+#COPY ./scripts/wait_for.sh /root/multinet/repo
 
-COPY ./scripts/build_lighthouse.sh /root/multinet/repo
-RUN ["/bin/bash", "build_lighthouse.sh"]
-COPY ./scripts/run_lighthouse.sh /root/multinet/repo
+#FROM multinet-tools as multinet-prysm
 
-COPY ./scripts/wait_for.sh /root/multinet/repo
-
-FROM multinet-tools as multinet-prysm
-
-COPY ./scripts/build_prysm.sh /root/multinet/repo
-RUN ["/bin/bash", "build_prysm.sh"]
-COPY ./scripts/run_prysm.sh /root/multinet/repo
+#COPY ./scripts/build_prysm.sh /root/multinet/repo
+#RUN ["/bin/bash", "build_prysm.sh"]
+#COPY ./scripts/run_prysm.sh /root/multinet/repo
 
 COPY ./scripts/wait_for.sh /root/multinet/repo
