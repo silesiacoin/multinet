@@ -45,4 +45,13 @@ bazel run //beacon-chain --define=ssz=$SPEC_VERSION -- \
   --chain-config-file=$TESTNET_DIR/config.yaml \
   --deposit-contract=0x00000000219ab540356cBB839Cbe05303d7705Fa \
   --interop-genesis-state=$TESTNET_DIR/genesis.ssz \
-  --accept-terms-of-use
+  --accept-terms-of-use &
+
+sleep 5
+
+bazel run //validator --define=ssz=$SPEC_VERSION -- \
+  --chain-config-file=$TESTNET_DIR/config.yaml \
+  --disable-accounts-v2=true \
+  --verbosity=debug \
+  --accept-terms-of-use \
+  --wallet-dir=$PRY_DATADIR/prysm/wallets

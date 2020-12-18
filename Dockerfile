@@ -50,12 +50,12 @@ COPY ./scripts/minimal.yaml /root/multinet/repo
 
 WORKDIR /root/multinet/repo
 
-FROM multinet-tools as multinet-lighthouse
+FROM multinet-tools as multinet-prysm
 
-COPY ./scripts/build_lighthouse.sh /root/multinet/repo
-RUN ["/bin/bash", "build_lighthouse.sh"]
-COPY ./scripts/run_lighthouse.sh /root/multinet/repo
-RUN chmod +x /root/multinet/repo/run_lighthouse.sh
+COPY ./scripts/build_prysm.sh /root/multinet/repo
+RUN ["/bin/bash", "build_prysm.sh"]
+COPY ./scripts/run_prysm.sh /root/multinet/repo
+RUN chmod +x /root/multinet/repo/run_prysm.sh
 
 COPY ./scripts/wait_for.sh /root/multinet/repo
 RUN chmod +x /root/multinet/repo/wait_for.sh
