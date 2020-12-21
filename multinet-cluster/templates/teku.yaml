@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: teku
+  labels:
+    app: multinet
+    tier: teku
+spec:
+  replicas: {{ .Values.teku_NODES }}
+  serviceName: teku
+  selector:
+    matchLabels:
+      tier: teku
+  template:
+    metadata:
+      generateName: teku-
+      labels:
+        tier: teku
+    spec:
+      volumes:
+        - name: deposits
+          persistentVolumeClaim:
+            claimName: deposits-storage
+        - name: common-data
+          persistentVolumeClaim:
+            claimName: common-data
+      containers:
+        - name: teku
+          image: silesiacoin/teku:v1
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /root/multinet/repo/deposits
+              name: deposits
+            - mountPath: /root/multinet/repo/data
+              name: common-data
+          ports:
+            - containerPort: 4000
+          args:
+            ["--network", "less-swift", "-logging", "ALL", "--eth1-endpoint", "https://rpc.l14.lukso.network/", "--eth1-deposit-contract-address", "0xEEBbf8e25dB001f4EC9b889978DC79B302DF9Efd"]
+          # inject environment variables
+          env:
+            - name: MULTINET_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MULTINET_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+        - name: eth2stats-client
+          image: eth2clients/eth2stats-client
+          imagePullPolicy: IfNotPresent
+          args: ["run", "--v", "--eth2stats.node-name", "$(MULTINET_POD_NAME)", "--eth2stats.addr", "eth2stats:9090", "--eth2stats.tls=false", "--beacon.type", "teku", "--beacon.addr", "$(MULTINET_POD_IP):4000"]
+          env:
+            - name: MULTINET_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MULTINET_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+
