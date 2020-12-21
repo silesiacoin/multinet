@@ -29,8 +29,10 @@ if [[ -f $TESTNET_DIR/bootstrap_nodes.txt ]]; then
   BOOTNODES_ARG="--bootstrap-node=$(cat $TESTNET_DIR/bootstrap_nodes.txt | paste -s -d, -)"
 fi
 
-# needs a mock contract or will not like it
-# 0x0 did not work
+cp
+
+# needs additional flag to connect to l14 from forked repo
+# web3provider connects to lukso l14 network https://rpc.l14.lukso.network/
 
 bazel run //beacon-chain --define=ssz=$SPEC_VERSION -- \
   $BOOTNODES_ARG \
@@ -42,14 +44,15 @@ bazel run //beacon-chain --define=ssz=$SPEC_VERSION -- \
   --verbosity=debug \
   --interop-eth1data-votes \
   --chain-config-file=$TESTNET_DIR/config.yaml \
-  --contract-deployment-block=0 \
-  --deposit-contract=0x8A04d14125D0FDCDc742F4A05C051De07232EDa4 \
+  --accept-terms-of-use \
+  --l14 \
+  --http-web3provider=https://rpc.l14.lukso.network/ \
   --interop-genesis-state=$TESTNET_DIR/genesis.ssz &
 
 sleep 5
 
+#It looks like commit in prysm was compatible with this implementation 8cac198692c73b5a85e598aa41ec213f7d41e2b5
 bazel run //validator --define=ssz=$SPEC_VERSION -- \
-  --chain-config-file=$TESTNET_DIR/config.yaml \
   --disable-accounts-v2=true \
   --verbosity=debug \
   --password="" \

@@ -1,4 +1,4 @@
-NIMBUS_NODES: 8
+NIMBUS_NODES: 2
 # external nodes we manually manage
 NIMBUS_DEV_NODES: 0
 # the path of the source code for the manually managed nodes
@@ -17,7 +17,7 @@ LIGHTHOUSE_DEV_NODES: 0
 LIGHTHOUSE_SOURCE_PATH: /run/desktop/mnt/host/e/tmp/multinet/lh
 LIGHTHOUSE_VALIDATORS: 64
 
-PRYSM_NODES: 2
+PRYSM_NODES: 8
 # external nodes we manually manage
 PRYSM_DEV_NODES: 0
 # the path of the source code for the manually managed nodes

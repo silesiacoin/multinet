@@ -27,11 +27,17 @@ else
 fi
 
 [[ -d "$SRCDIR" ]] || {
-  git clone https://github.com/prysmaticlabs/prysm.git "$SRCDIR"
+  git clone https://github.com/silesiacoin/prysm.git "$SRCDIR"
 }
 
 set -x
 
 cd "$SRCDIR"
+
+apt update -y && apt install -y bazel-3.2.0
+
+git fetch origin
+git checkout --track origin/feature/l14-with-compatible-validator
+git pull
 
 bazel build //beacon-chain --define=ssz=$SPEC_VERSION && bazel build //validator --define=ssz=$SPEC_VERSION

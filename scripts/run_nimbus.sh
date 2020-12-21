@@ -52,7 +52,5 @@ $NIMBUS_BIN \
   --rpc-address="0.0.0.0" \
   --rpc-port=7000 \
   $BOOTNODES_ARG $NAT_FLAG \
-  --web3-url="http://34.78.227.45:8545/" \
-  --deposit-contract="0xEEBbf8e25dB001f4EC9b889978DC79B302DF9Efd"\
   --state-snapshot:$TESTNET_DIR/genesis.ssz \
   --metrics
