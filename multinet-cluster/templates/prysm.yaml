@@ -26,7 +26,7 @@ spec:
             claimName: common-data
       containers:
         - name: prysm
-          image: silesiacoin/multinet-prysm:l14-omikron
+          image: silesiacoin/multinet-prysm:v13
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - mountPath: /root/multinet/repo/deposits
@@ -61,4 +61,3 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-      

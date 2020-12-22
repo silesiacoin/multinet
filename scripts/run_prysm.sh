@@ -53,7 +53,7 @@ WALLET_DIR=$PRY_DATADIR/prysm/wallets
 
 mkdir -p $WALLET_DIR
 
-if [[ ! -f $WALLLET_DIR/password.txt ]]; then
+if [[ ! -f $WALLET_DIR/password.txt ]]; then
   apt install -y pwgen
   pwgen -B 24 -c 1 -y -n > $WALLET_DIR/password.txt
   bazel run //validator -- \

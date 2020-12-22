@@ -106,6 +106,9 @@ In order to check whats going on on disk itself do:
 
 To check `$NFS_SERVER_POD_NAME` do `kubectl get pods`
 
+To apply changes use:
+`helm upgrade -f $PWD/multinet-cluster/values.yaml eth20 $PWD/multinet-cluster`
+
 When you want to expose eth2stats you need to export external ips:
 https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-address/
 
