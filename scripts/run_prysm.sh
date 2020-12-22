@@ -50,7 +50,6 @@ bazel run //beacon-chain --define=ssz=$SPEC_VERSION -- \
 sleep 5
 
 WALLET_DIR=$PRY_DATADIR/prysm/wallets
-mkdir -p $WALLET_DIR
 
 if [[ ! -d $WALLLET_DIR ]]; then
   mkdir -p $WALLET_DIR
