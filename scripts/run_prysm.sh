@@ -29,8 +29,6 @@ if [[ -f $TESTNET_DIR/bootstrap_nodes.txt ]]; then
   BOOTNODES_ARG="--bootstrap-node=$(cat $TESTNET_DIR/bootstrap_nodes.txt | paste -s -d, -)"
 fi
 
-cp
-
 # needs additional flag to connect to l14 from forked repo
 # web3provider connects to lukso l14 network https://rpc.l14.lukso.network/
 
@@ -51,10 +49,29 @@ bazel run //beacon-chain --define=ssz=$SPEC_VERSION -- \
 
 sleep 5
 
-#It looks like commit in prysm was compatible with this implementation 8cac198692c73b5a85e598aa41ec213f7d41e2b5
+WALLET_DIR=$PRY_DATADIR/prysm/wallets
+mkdir -p $WALLET_DIR
+
+if [[ ! -d $WALLLET_DIR ]]; then
+  mkdir -p $WALLET_DIR
+  bazel run //validator -- \
+    wallet create \
+    --wallet-dir=$WALLET_DIR \
+    --keymanager-kind=derived \
+    --wallet-password-file=$WALLET_DIR/password.txt \
+    --skip-mnemonic-25th-word-check=false
+fi
+
+if [[ ! -f $WALLLET_DIR/password.txt ]]; then
+  apt install -y pwgen
+  pwgen -B 24 -c 1 -y -n > $WALLET_DIR/password.txt
+fi
+
+#It looks like commit in prysm was compatible with this implementation
 bazel run //validator --define=ssz=$SPEC_VERSION -- \
   --disable-accounts-v2=true \
   --verbosity=debug \
-  --password="" \
+  --password=$WALLET_DIR/password.txt \
+  --wallet-dir=$WALLET_DIR \
   --keymanager=wallet \
   --keymanageropts=$PRY_DATADIR/prysm/keymanager_opts.json
