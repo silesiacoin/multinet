@@ -51,19 +51,17 @@ sleep 5
 
 WALLET_DIR=$PRY_DATADIR/prysm/wallets
 
-if [[ ! -d $WALLLET_DIR ]]; then
-  mkdir -p $WALLET_DIR
+mkdir -p $WALLET_DIR
+
+if [[ ! -f $WALLLET_DIR/password.txt ]]; then
+  apt install -y pwgen
+  pwgen -B 24 -c 1 -y -n > $WALLET_DIR/password.txt
   bazel run //validator -- \
     wallet create \
     --wallet-dir=$WALLET_DIR \
     --keymanager-kind=derived \
     --wallet-password-file=$WALLET_DIR/password.txt \
     --skip-mnemonic-25th-word-check=false
-fi
-
-if [[ ! -f $WALLLET_DIR/password.txt ]]; then
-  apt install -y pwgen
-  pwgen -B 24 -c 1 -y -n > $WALLET_DIR/password.txt
 fi
 
 #It looks like commit in prysm was compatible with this implementation
@@ -74,3 +72,4 @@ bazel run //validator --define=ssz=$SPEC_VERSION -- \
   --wallet-dir=$WALLET_DIR \
   --keymanager=wallet \
   --keymanageropts=$PRY_DATADIR/prysm/keymanager_opts.json
+
