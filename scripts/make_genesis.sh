@@ -18,6 +18,8 @@ FORK_VERSION=0x00000000
 DEPOSIT_AMOUNT=32000000000
 WITHDRAWALS_MNEMONIC="enough animal salon barrel poet method husband evidence grain excuse grass science there wedding blind glimpse surge loan reopen chalk toward change survey bag"
 VALIDATORS_MNEMONIC="stay depend ignore lady access will dress idea hybrid tube original riot between plate ethics ecology green response hollow famous salute they warrior little"
+# Assign default network id if not set
+NETWORK_ID=${NETWORK_ID:=4004180}
 
 rm -rf /root/multinet/repo/deposits
 mkdir -p /root/multinet/repo/deposits
@@ -50,6 +52,9 @@ $GO_PATH/bin/eth2-val-tools assign \
   --wallet-name="multinet-wallet"
 
 mv /root/multinet/repo/deposits/nimbus-$c/nimbus-keys /root/multinet/repo/deposits/nimbus-$c/validators
+chmod -R 750 /root/multinet/repo/deposits/nimbus-$c
+chmod -R 600 /root/multinet/repo/deposits/nimbus-$c/validators
+chmod -R 600 /root/multinet/repo/deposits/nimbus-$c/secrets
 
 VALIDATOR_OFFSET=$(($VALIDATOR_OFFSET + $NIMBUS_VALIDATORS))
 done
@@ -76,6 +81,9 @@ $GO_PATH/bin/eth2-val-tools assign \
   --wallet-name="multinet-wallet"
 
 mv /root/multinet/repo/deposits/nimbus-dev-$c/nimbus-keys /root/multinet/repo/deposits/nimbus-dev-$c/validators
+chmod -R 750 /root/multinet/repo/deposits/nimbus-dev-$c
+chmod -R 600 /root/multinet/repo/deposits/nimbus-dev-$c/validators
+chmod -R 600 /root/multinet/repo/deposits/nimbus-dev-$c/secrets
 
 VALIDATOR_OFFSET=$(($VALIDATOR_OFFSET + $NIMBUS_VALIDATORS))
 done
@@ -202,7 +210,7 @@ echo "Deposits done."
 # GENESIS STATE
 
 # Nimbus path
-SRCDIR=${NIMBUS_PATH:-"nim-beacon-chain"}
+SRCDIR=${NIMBUS_PATH:-"nimbus-eth2"}
 DEPOSITS_DIR="/root/multinet/repo/deposits"
 
 NUM_VALIDATORS=$VALIDATOR_OFFSET
@@ -238,6 +246,8 @@ $NIMBUS_BIN \
   --deposits-file=$DEPOSITS_DIR/deposits.json \
   --total-validators=$NUM_VALIDATORS \
   --output-genesis="${TESTNET_DIR}/genesis.ssz" \
+  --netkey-file="${TESTNET_DIR}/network_key.json" \
+  --insecure-netkey-password=true \
   --output-bootstrap-file="${TESTNET_DIR}/bootstrap_nodes.txt" \
   --bootstrap-address=$IP_ADDRESS \
   --bootstrap-port=50000 \
