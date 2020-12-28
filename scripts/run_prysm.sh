@@ -72,4 +72,10 @@ bazel run //validator --define=ssz=$SPEC_VERSION -- \
   --disable-accounts-v2=true \
   --verbosity=debug \
   --accept-terms-of-use \
-  --wallet-dir=$PRY_DATADIR/prysm/wallets
+  --wallet-dir=$WALLET_DIR
+
+while true
+do
+	echo "Press [CTRL+C] to stop.."
+	sleep 1
+done
