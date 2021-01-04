@@ -29,7 +29,7 @@ spec:
             path: "{{ .Values.PRYSM_SOURCE_PATH }}"
       containers:
         - name: prysm-dev
-          image: eth2clients/multinet-prysm
+          image: silesiacoin/multinet-prysm:v17
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - mountPath: /root/multinet/repo/deposits

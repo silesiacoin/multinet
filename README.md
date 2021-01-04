@@ -115,6 +115,7 @@ https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-ad
 Example of exposure:
 `kubectl expose deployment eth2stats-server --type=LoadBalancer --name=svrbalancer`
 `kubectl expose deployment eth2stats-dashboard --type=LoadBalancer --name=dashbalancer`
+`kubectl expose deployment launchpad-dashboard --type=LoadBalancer --name=launchpadbalancer`
 
 What is problematic is the config of ethstats.
 

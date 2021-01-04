@@ -1,0 +1,19 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: launchpad-dashboard
+spec:
+  selector:
+    matchLabels:
+      app: launchpad-dashboard
+  template:
+    metadata:
+      labels:
+        app: launchpad-dashboard
+    spec:
+      containers:
+      - name: launchpad-dashboard
+        image: silesiacoin/eth20-deposit:l14-v002
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80

@@ -76,6 +76,6 @@ bazel run //validator --define=ssz=$SPEC_VERSION -- \
 
 while true
 do
-	echo "Press [CTRL+C] to stop.."
+	echo ""
 	sleep 1
 done
