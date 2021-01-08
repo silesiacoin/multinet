@@ -1,0 +1,19 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: eth2-beaconchain-explorer
+spec:
+  selector:
+    matchLabels:
+      app: eth2-beaconchain-explorer
+  template:
+    metadata:
+      labels:
+        app: eth2-beaconchain-explorer
+    spec:
+      containers:
+        - name: eth2-beaconchain-explorer
+          image: silesiacoin/eth2-beaconchain-explorer:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3333

@@ -1,0 +1,35 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      volumes:
+        - name: common-data
+          persistentVolumeClaim:
+            claimName: common-data
+      containers:
+        - name: postgres
+          image: postgres:12.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - postgres psql -f /src/tables.sql -d db -h 0.0.0.0 -U postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.POSTGRES_PASSWORD }}
+            - name: POSTGRES_USER
+              value: {{ .Values.POSTGRES_USER }}
+            - name: POSTGRES_DB
+              value: {{ .Values.POSTGRES_DB }}
+            - name: PGDATA
+              value: {{ .Values.PGDATA }}
+          volumeMounts:
+            - mountPath: /root/multinet/postgresql/data
+              name: common-data
