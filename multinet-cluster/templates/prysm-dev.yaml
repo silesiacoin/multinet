@@ -39,6 +39,10 @@ spec:
           - mountPath: /root/multinet/repo/prysm-src
             name: prysm-source
           command: [ "bash", "-c"]
+          ports:
+            - containerPort: 4000
+            - containerPort: 13000
+              protocol: TCP
           args:
           # sleep forever, must attach manually to operate!
           - tail -f /dev/null
