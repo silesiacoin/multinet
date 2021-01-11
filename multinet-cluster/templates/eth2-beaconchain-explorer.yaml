@@ -21,7 +21,7 @@ spec:
             claimName: common-data
       containers:
         - name: eth2-beaconchain-explorer
-          image: silesiacoin/eth2-beaconchain-explorer:v3
+          image: silesiacoin/eth2-beaconchain-explorer:v5
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3333
