@@ -1,19 +1,71 @@
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
-kind: Deployment
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
-  name: eth2-beaconchain-explorer
+  name: explorer
+  labels:
+    app: multinet
+    tier: explorer
 spec:
+  serviceName: explorer
   selector:
     matchLabels:
-      app: eth2-beaconchain-explorer
+      tier: explorer
   template:
     metadata:
       labels:
-        app: eth2-beaconchain-explorer
+        tier: explorer
     spec:
+      volumes:
+        - name: common-data
+          persistentVolumeClaim:
+            claimName: common-data
       containers:
         - name: eth2-beaconchain-explorer
-          image: silesiacoin/eth2-beaconchain-explorer:v1
+          image: silesiacoin/eth2-beaconchain-explorer:v3
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3333
+          args:
+            - ./run_explorer.sh
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.POSTGRES_PASSWORD }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.POSTGRES_USER }}"
+            - name: POSTGRES_DB
+              value: "{{ .Values.POSTGRES_DB }}"
+            - name: PGDATA
+              value: "{{ .Values.PGDATA }}"
+            - name: MULTINET_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MULTINET_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+        - name: postgres
+          image: postgres:12.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "{{ .Values.POSTGRES_PASSWORD }}"
+            - name: POSTGRES_USER
+              value: "{{ .Values.POSTGRES_USER }}"
+            - name: POSTGRES_DB
+              value: "{{ .Values.POSTGRES_DB }}"
+            - name: PGDATA
+              value: "{{ .Values.PGDATA }}"
+            - name: MULTINET_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MULTINET_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          volumeMounts:
+            - mountPath: /root/multinet/postgresql/data
+              name: common-data

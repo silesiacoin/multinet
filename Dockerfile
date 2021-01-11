@@ -1,5 +1,4 @@
-FROM silesiacoin/multinet-prysm:v17 as Builder
+FROM silesiacoin/eth2-beaconchain-explorer:v3 as Builder
 
-COPY ./scripts/run_prysm.sh /root/multinet/repo
-RUN chmod +x /root/multinet/repo/run_prysm.sh
-RUN chmod +x /root/multinet/repo/wait_for.sh
+COPY ./scripts/run_explorer.sh /root/multinet/repo
+RUN chmod +x /root/multinet/repo/run_explorer.sh
