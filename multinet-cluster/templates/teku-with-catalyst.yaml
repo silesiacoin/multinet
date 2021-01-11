@@ -38,7 +38,7 @@ spec:
             - containerPort: 8545
             - containerPort: 30303
           args:
-            - ./geth --datadir /root/multinet/repo/data/$(MULTINET_POD_NAME) init /root/multinet/repo/data/testnet/genesis.json && ./geth --rpc --rpcapi net,eth,eth2 --nodiscover --etherbase 0x1000000000000000000000000000000000000000 --datadir /root/multinet/repo/data/$(MULTINET_POD_NAME) --rpccorsdomain "*" --rpcaddr "$MULTINET_POD_IP"
+            - ./geth --datadir /root/multinet/repo/data/$(MULTINET_POD_NAME) init /root/multinet/repo/data/testnet/genesis.json && ./geth --rpc --rpcapi net,eth,eth2 --nodiscover --etherbase 0x1000000000000000000000000000000000000000 --datadir /root/multinet/repo/data/$(MULTINET_POD_NAME) --rpccorsdomain "*" --rpcaddr "$MULTINET_POD_IP" --verbosity 9
           # inject environment variables
           env:
             - name: MULTINET_POD_NAME
@@ -97,7 +97,7 @@ spec:
               name: common-data
           command: [ "bash", "-c" ]
           args:
-            - rm -rf /root/multinet/repo/data/$(MULTINET_POD_NAME); mkdir -p /root/multinet/repo/data/$(MULTINET_POD_NAME); ./teku/bin/teku genesis mock --output-file /root/multinet/repo/data/testnet/genesis.ssz --eth1-block-hash $ETH_1_BLOCK_HASH; echo "$GENESIS_BODY" > /root/multinet/repo/data/testnet/genesis.json; echo "STATIC_NODES" > /root/multinet/repo/data/$(MULTINET_POD_NAME)/static-nodes.json; echo "STATIC_NODES" > /root/multinet/repo/data/$(MULTINET_POD_NAME)/trusted-nodes.json;
+            - rm -rf /root/multinet/repo/data/$(MULTINET_POD_NAME); mkdir -p /root/multinet/repo/data/$(MULTINET_POD_NAME); ./teku/bin/teku genesis mock --output-file /root/multinet/repo/data/testnet/genesis.ssz --eth1-block-hash $ETH_1_BLOCK_HASH; echo "$GENESIS_BODY" > /root/multinet/repo/data/testnet/genesis.json; echo "$STATIC_NODES" > /root/multinet/repo/data/$(MULTINET_POD_NAME)/static-nodes.json; echo "$STATIC_NODES" > /root/multinet/repo/data/$(MULTINET_POD_NAME)/trusted-nodes.json;
           # inject environment variables
           env:
             - name: MULTINET_POD_NAME
@@ -132,4 +132,4 @@ spec:
             - name: ETH_1_BLOCK_HASH
               value: "{{ .Values.ETH_1_BLOCK_HASH }}"
             - name: STATIC_NODES
-              value: {{ .Files.Get "static_nodes.json" | toJson }}
+              value: {{ .Files.Get "static-nodes.json" | toJson }}
