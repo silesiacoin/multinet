@@ -63,7 +63,7 @@ spec:
             - containerPort: 4000
             - containerPort: 5051
           args:
-            - ./teku/bin/teku --Xinterop-enabled=true --Xinterop-owned-validator-count=64 --network=minimal --p2p-enabled=false --initial-state /root/multinet/repo/data/testnet/genesis.ssz --eth1-engine http://$MULTINET_POD_IP:8545 --rest-api-interface=$MULTINET_POD_IP --rest-api-host-allowlist="*" --rest-api-port=5051 --logging=all
+            - ./teku/bin/teku --Xinterop-enabled=true --Xinterop-owned-validator-count=64 --network=minimal --p2p-enabled=false --initial-state /root/multinet/repo/data/testnet/genesis.ssz --eth1-engine http://$MULTINET_POD_IP:8545 --rest-api-interface=$MULTINET_POD_IP --rest-api-host-allowlist="*" --rest-api-port=5051 --logging=all --rest-api-enabled=true
           env:
             - name: MULTINET_POD_NAME
               valueFrom:
@@ -97,7 +97,7 @@ spec:
               name: common-data
           command: [ "bash", "-c" ]
           args:
-            - if [[ $MULTINET_POD_NAME == "teku-catalyst-0" ]]; then mkdir -p /root/multinet/repo/data/$(MULTINET_POD_NAME); ./teku/bin/teku genesis mock --output-file /root/multinet/repo/data/testnet/genesis.ssz --eth1-block-hash $ETH_1_BLOCK_HASH; echo "$GENESIS_BODY" > /root/multinet/repo/data/testnet/genesis.json;  else echo "Done"; fi
+            - if [[ $MULTINET_POD_NAME == "teku-catalyst-0" ]]; then rm -rf /root/multinet/repo/data/$(MULTINET_POD_NAME); mkdir -p /root/multinet/repo/data/$(MULTINET_POD_NAME); mkdir -p /root/multinet/repo/data/$(MULTINET_POD_NAME); ./teku/bin/teku genesis mock --output-file /root/multinet/repo/data/testnet/genesis.ssz --eth1-block-hash $ETH_1_BLOCK_HASH; echo "$GENESIS_BODY" > /root/multinet/repo/data/testnet/genesis.json;  else echo "Done"; fi
           # inject environment variables
           env:
             - name: MULTINET_POD_NAME
