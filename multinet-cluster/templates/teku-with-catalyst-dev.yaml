@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: prysm
+  name: teku-catalyst-dev
   labels:
     app: multinet
-    tier: prysm
+    tier: teku-catalyst-dev
 spec:
   replicas: {{ .Values.TEKU_CATALYST_NODES }}
   serviceName: teku-catalyst
