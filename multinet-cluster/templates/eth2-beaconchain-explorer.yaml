@@ -25,8 +25,6 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3333
-          args:
-            - ./run_explorer.sh
           env:
             - name: POSTGRES_PASSWORD
               value: "{{ .Values.POSTGRES_PASSWORD }}"
