@@ -1,4 +1,4 @@
-NIMBUS_NODES: 1
+NIMBUS_NODES: 0
 # external nodes we manually manage
 NIMBUS_DEV_NODES: 0
 # the path of the source code for the manually managed nodes
@@ -17,9 +17,9 @@ LIGHTHOUSE_DEV_NODES: 0
 LIGHTHOUSE_SOURCE_PATH: /run/desktop/mnt/host/e/tmp/multinet/lh
 LIGHTHOUSE_VALIDATORS: 64
 
-PRYSM_NODES: 6
+PRYSM_NODES: 0
 # external nodes we manually manage
-PRYSM_DEV_NODES: 2
+PRYSM_DEV_NODES: 0
 # the path of the source code for the manually managed nodes
 # point it to an already existing source tree or
 # you will find the oritinal source in the container you can copy also
@@ -40,7 +40,6 @@ ETH2STATS_SERVER_EXPOSURE_PORT: 8080
 # ETH 2.0 PHASE 1
 TEKU_CATALYST_NODES: 1
 TEKU_CATALYST_NODES_DEV: 1
-GENESIS_BODY: '{ "config": { "chainId": 220720, "homesteadBlock": 0, "eip150Block": 0, "eip155Block": 0, "eip158Block": 0, "byzantiumBlock": 0, "constantinopleBlock": 0, "petersburgBlock": 0, "istanbulBlock": 0 }, "alloc": {}, "coinbase": "0x0000000000000000000000000000000000000000", "difficulty": "0x20000", "extraData": "", "gasLimit": "0x2fefd8", "nonce": "0x0000000000220720", "mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000", "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000", "timestamp": "0x00" }'
 ETH_1_BLOCK_HASH: 0x3a3fdfc9ab6e17ff530b57bc21494da3848ebbeaf9343545fded7a18d221ffec
 
 
