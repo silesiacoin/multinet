@@ -38,7 +38,7 @@ spec:
             - containerPort: 8545
             - containerPort: 30303
           args:
-            - ./geth --datadir /root/multinet/repo/data/$(MULTINET_POD_NAME) init /root/multinet/repo/data/testnet/genesis.json && ./geth --rpc --rpcapi net,eth,eth2 --nodiscover --etherbase 0x1000000000000000000000000000000000000000 --datadir /root/multinet/repo/data/$(MULTINET_POD_NAME) --rpccorsdomain "*" --rpcaddr "$MULTINET_POD_IP" --verbosity 9 --ethstats "$MULTINET_POD_NAME:$CATALYST_STATS_LOGIN_SECRET@$CATALYST_STATS_HOST:80"
+            - ./geth --datadir /root/multinet/repo/data/$(MULTINET_POD_NAME) init /root/multinet/repo/data/testnet/genesis.json && ./geth --rpc --rpcapi net,eth,eth2 --etherbase 0x1000000000000000000000000000000000000000 --datadir /root/multinet/repo/data/$(MULTINET_POD_NAME) --rpccorsdomain "*" --rpcaddr "$MULTINET_POD_IP" --verbosity 9 --ethstats "$MULTINET_POD_NAME:$CATALYST_STATS_LOGIN_SECRET@$CATALYST_STATS_HOST:80"
           # inject environment variables
           env:
             - name: MULTINET_POD_NAME
@@ -67,7 +67,7 @@ spec:
             - containerPort: 4000
             - containerPort: 5051
           args:
-            - ./teku/bin/teku --Xinterop-enabled=true --Xinterop-owned-validator-count=64 --network=minimal --p2p-enabled=false --initial-state /root/multinet/repo/data/testnet/genesis.ssz --eth1-engine http://$MULTINET_POD_IP:8545 --rest-api-interface=$MULTINET_POD_IP --rest-api-host-allowlist="*" --rest-api-port=5051 --logging=all --rest-api-enabled=true
+            - ./teku/bin/teku --Xinterop-enabled=true --Xinterop-owned-validator-count=64 --network=minimal --p2p-enabled=true --p2p-discovery-enabled=true --initial-state /root/multinet/repo/data/testnet/genesis.ssz --eth1-engine http://$MULTINET_POD_IP:8545 --rest-api-interface=$MULTINET_POD_IP --rest-api-host-allowlist="*" --rest-api-port=5051 --logging=all --rest-api-enabled=true --metrics-enabled=true --p2p-discovery-bootnodes=$TEKU_BOOTNODE_ENR
           env:
             - name: MULTINET_POD_NAME
               valueFrom:
@@ -77,6 +77,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
+            - name: TEKU_BOOTNODE_ENR
+              value: "{{ .Values.TEKU_BOOTNODE_ENR }}"
         - name: eth2stats-client
           image: eth2clients/eth2stats-client
           imagePullPolicy: IfNotPresent
