@@ -119,6 +119,10 @@ Example of exposure:
 
 What is problematic is the config of ethstats.
 
+### Copy the contents of logs from kubernetes pods
+Example for teku:
+`kubectl cp teku-catalyst-4:/root/.local/share/teku/logs/teku.log ./teku-log-4 -c teku`
+
 ### Prysm validator build
 
 1. Build `multinet-prysm` by using dockerfile from project root.
