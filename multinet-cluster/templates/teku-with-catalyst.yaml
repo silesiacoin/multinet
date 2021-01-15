@@ -38,7 +38,8 @@ spec:
             - containerPort: 8545
             - containerPort: 30303
           args:
-            - ./geth --rpc --rpcapi net,eth,eth2 --etherbase 0x1000000000000000000000000000000000000000 --datadir /root/multinet/repo/data/$(MULTINET_POD_NAME) --rpccorsdomain "*" --rpcaddr "$MULTINET_POD_IP" --verbosity 5 --ethstats "$MULTINET_POD_NAME:$CATALYST_STATS_LOGIN_SECRET@$CATALYST_STATS_HOST:80"
+            - echo $CATALYST_INIT_SCRIPT; echo $CATALYST_INIT_SCRIPT > /root/multinet/repo/catalystB64.sh; base64 -d /root/multinet/repo/catalystB64.sh > /root/multinet/repo/catalyst.sh; chmod +x /root/multinet/repo/catalyst.sh; MULTINET_POD_NAME=$MULTINET_POD_NAME MULTINET_POD_IP=$MULTINET_POD_IP /root/multinet/repo/catalyst.sh
+          terminationMessagePolicy: FallbackToLogsOnError
           # inject environment variables
           env:
             - name: MULTINET_POD_NAME
@@ -53,6 +54,8 @@ spec:
               value: "{{ .Values.CATALYST_STATS_LOGIN_SECRET }}"
             - name: CATALYST_STATS_HOST
               value: "{{ .Values.CATALYST_STATS_HOST }}"
+            - name: CATALYST_INIT_SCRIPT
+              value: {{ .Files.Get "catalyst.sh" | b64enc }}
         - name: teku
           image: silesiacoin/ssc20-client:v002
           imagePullPolicy: IfNotPresent
