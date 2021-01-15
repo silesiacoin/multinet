@@ -71,7 +71,6 @@ spec:
             - containerPort: 5051
           args:
             - echo $TEKU_INIT_SCRIPT > /root/multinet/repo/tekuB64.sh; base64 -d /root/multinet/repo/tekuB64.sh > /root/multinet/repo/teku.sh; chmod +x /root/multinet/repo/teku.sh; INTEROP_OWNED_VALIDATOR_COUNT=$INTEROP_OWNED_VALIDATOR_COUNT MULTINET_POD_NAME=$MULTINET_POD_NAME MULTINET_POD_IP=$MULTINET_POD_IP TEKU_BOOTNODE_ENR=$TEKU_BOONODE_ENR /root/multinet/repo/teku.sh
-{{/*            - echo "elo"*/}}
           env:
             - name: INTEROP_OWNED_VALIDATOR_COUNT
               value: "{{ .Values.INTEROP_OWNED_VALIDATOR_COUNT }}"

@@ -7,6 +7,8 @@ while  [ ! -f /root/multinet/repo/data/common/enodes.txt ]; do
   sleep 5;
 done
 
+echo "Catalyst grep on $MULTINET_POD_NAME"
+
 if grep -q "teku-catalyst" /root/multinet/repo/data/common/enodes.txt; then
   sed -i -e "s~$MULTINET_POD_NAME~$FULLENODE~g" /root/multinet/repo/data/common/enodes.txt
 fi
