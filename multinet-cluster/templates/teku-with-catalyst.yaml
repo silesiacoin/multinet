@@ -105,7 +105,7 @@ spec:
               name: common-data
           command: [ "bash", "-c" ]
           args:
-            - echo $GENESIS_INIT_SCRIPT > /root/multinet/repo/genesisB64.sh; base64 -d /root/multinet/repo/genesisB64.sh > /root/multinet/repo/genesis.sh; chmod +x /root/multinet/repo/genesis.sh; MULTINET_POD_NAME=$MULTINET_POD_NAME GENESIS_BODY=$GENESIS_BODY STATIC_NODES=$STATIC_NODES GENESIS_TIME=$GENESIS_TIME /root/multinet/repo/genesis.sh
+            - echo $GENESIS_INIT_SCRIPT > /root/multinet/repo/genesisB64.sh; base64 -d /root/multinet/repo/genesisB64.sh > /root/multinet/repo/genesis.sh; chmod +x /root/multinet/repo/genesis.sh; MULTINET_POD_NAME=$MULTINET_POD_NAME MULTINET_POD_IP=$MULTINET_POD_IP GENESIS_BODY=$GENESIS_BODY STATIC_NODES=$STATIC_NODES GENESIS_TIME=$GENESIS_TIME /root/multinet/repo/genesis.sh
           # inject environment variables
           env:
             - name: MULTINET_POD_NAME
