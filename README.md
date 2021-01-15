@@ -67,8 +67,8 @@ where `$DEPLOYMENT_NAME` is your name choice
 (temporary solution)
 
 You need to put NAMES of every pod into `static-nodes.json`
-before deploying. They will be replaced with enodes by script in genesis container.
-
+before deploying. They will be replaced with enodes by script in genesis container.  
+The length of array must match `TEKU_CATALYST_NODES` from `values.yaml`
 Example config for 8 nodes:
 ```json
 [
