@@ -63,6 +63,26 @@ where `$DEPLOYMENT_NAME` is your name choice
 3. `nim c -o:beacon_node $NIMFLAGS beacon_chain/beacon_node`
 4. `./beacon_node --state-snapshot:/root/multinet/repo/data/testnet/genesis.ssz --bootstrap-file=/root/multinet/repo/data/testnet/bootstrap_nodes.txt`
 
+# Enodes propagation
+(temporary solution)
+
+You need to put NAMES of every pod into `static-nodes.json`
+before deploying. They will be replaced with enodes by script in genesis container.
+
+Example config for 8 nodes:
+```json
+[
+  "teku-catalyst-0",
+  "teku-catalyst-1",
+  "teku-catalyst-2",
+  "teku-catalyst-3",
+  "teku-catalyst-4",
+  "teku-catalyst-5",
+  "teku-catalyst-6",
+  "teku-catalyst-7"
+]
+```
+
 ## TODO
 
 - [ ] Integrate eth2stats
