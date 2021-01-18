@@ -19,6 +19,28 @@ while grep -q "teku-catalyst" /root/multinet/repo/data/common/enodes.txt; do
   sleep 5;
 done
 
+yes | apt install curl;
+yes | apt install jq;
+
+WAIT_FOR_BOOTNODE=true;
+
+TEKU_BOOTNODE_ENR=enr:-KG4QLsrN3KDJILIds0VdLhke1hS3IPDfyT6Ht9moJ98alqQHyuGGcWouNI1eZkqnu2_GhoEAID4vmgZF7kgxplWXt8DhGV0aDKQUmfZxgAAAAH__________4JpZIJ2NIJpcIQKAAAOiXNlY3AyNTZrMaECHUus3zWMIQA3Zebysp9d_cXk6ncpGszUqybmiKd6kVqDdGNwgiMog3VkcIIjKA;
+
+if [ "$MULTINET_POD_NAME" != "teku-catalyst-0" ]; then
+  while [ $WAIT_FOR_BOOTNODE ]; do
+    TEKU_BOOTNODE_ENR=$(curl -s http://bootstrap:5051/eth/v1/node/identity | jq -r '.data.enr')
+    echo $TEKU_BOOTNODE_ENR;
+      if echo $TEKU_BOOTNODE_ENR | grep enr; then
+        WAIT_FOR_BOOTNODE=false;
+        break;
+      fi
+    echo Waiting for bootnode to be up;
+    sleep 5;
+  done
+fi
+
+
+
 echo "starting with Interop index $INTEROP_START_INDEX";
 
 ./teku/bin/teku --Xinterop-enabled=true \
