@@ -16,4 +16,8 @@ data/
 .vscode/
 *.log
 
-/.idea/
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
