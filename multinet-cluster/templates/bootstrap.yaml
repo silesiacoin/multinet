@@ -8,4 +8,4 @@ spec:
     statefulset.kubernetes.io/pod-name: teku-catalyst-0
   ports:
     - protocol: TCP
-      port: 50000
+      port: 5051

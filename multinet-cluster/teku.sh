@@ -35,4 +35,4 @@ echo "starting with Interop index $INTEROP_START_INDEX";
 --rest-api-enabled=true \
 --metrics-enabled=true \
 --p2p-discovery-bootnodes=$TEKU_BOOTNODE_ENR \
---Xinterop-owned-validator-start-index $INTEROP_START_INDEX
+--Xinterop-owned-validator-start-index "$INTEROP_START_INDEX"
