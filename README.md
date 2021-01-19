@@ -156,4 +156,5 @@ CC0 (Creative Common Zero)
 
 # Known issues
 
-For some reason (due to the `build.rs` in `deposit_contract` project) lighthouse will need to build again (we built already in the Dockerfile...) the first time `docker-compose up` will run.
+* For some reason (due to the `build.rs` in `deposit_contract` project) lighthouse will need to build again (we built already in the Dockerfile...) the first time `docker-compose up` will run.
+* If you spin new network with catalyst and teku  `ETH_2_GENESIS_TIME` in `multinet-cluster/values.yml` cannot be too old. The best approach is to get current timestamp and inject into `multinet-cluster/values.yml`. TL:DR; `https://www.unixtimestamp.com/index.php`  
