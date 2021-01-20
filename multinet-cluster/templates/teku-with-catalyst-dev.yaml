@@ -61,6 +61,7 @@ spec:
           ports:
             - containerPort: 9000
             - containerPort: 4000
+            - containerPort: 5051
           args:
             - tail -f /dev/null
           env:
