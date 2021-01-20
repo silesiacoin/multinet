@@ -19,5 +19,5 @@ done
 
 cp /root/multinet/repo/data/common/enodes.txt /root/multinet/repo/data/$MULTINET_POD_NAME/geth/static-nodes.json
 cp /root/multinet/repo/data/common/enodes.txt /root/multinet/repo/data/$MULTINET_POD_NAME/geth/trusted-nodes.json
-./geth --rpc --rpcapi net,eth,eth2 --etherbase 0x1000000000000000000000000000000000000000 --datadir /root/multinet/repo/data/$MULTINET_POD_NAME --rpccorsdomain "*" --rpcaddr "$MULTINET_POD_IP" --verbosity 5 --ethstats "$MULTINET_POD_NAME:$CATALYST_STATS_LOGIN_SECRET@$CATALYST_STATS_HOST:80"
+./geth --rpc --rpcapi net,eth,eth2 --etherbase 0x1000000000000000000000000000000000000000 --datadir /root/multinet/repo/data/$MULTINET_POD_NAME --rpccorsdomain "*" --rpcaddr "$MULTINET_POD_IP" --verbosity 5 --ethstats "$MULTINET_POD_NAME:$CATALYST_STATS_LOGIN_SECRET@$CATALYST_STATS_HOST:80" --txpool.processtxs
 echo "Done";
