@@ -45,7 +45,7 @@ TEKU_BOOTNODE_ENR: enr:-KG4QLsrN3KDJILIds0VdLhke1hS3IPDfyT6Ht9moJ98alqQHyuGGcWou
 ETH_2_GENESIS_TIME: "1611051482"
 ETH_2_VALIDATORS: 128
 #Number of validators from interop that teku should own
-INTEROP_OWNED_VALIDATOR_COUNT: 12
+INTEROP_OWNED_VALIDATOR_COUNT: 16
 
 # Ethstats for catalyst
 CATALYST_STATS_HOST: catalyst.silesiacoin.com
