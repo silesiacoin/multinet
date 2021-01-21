@@ -7,6 +7,7 @@ metadata:
     tier: prysm-dev
 spec:
   replicas: {{ .Values.PRYSM_DEV_NODES }}
+  serviceName: prysm-dev
   selector:
     matchLabels:
       tier: prysm-dev
@@ -28,7 +29,7 @@ spec:
             path: "{{ .Values.PRYSM_SOURCE_PATH }}"
       containers:
         - name: prysm-dev
-          image: eth2clients/multinet-prysm
+          image: silesiacoin/multinet-prysm:v17
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - mountPath: /root/multinet/repo/deposits
@@ -38,6 +39,10 @@ spec:
           - mountPath: /root/multinet/repo/prysm-src
             name: prysm-source
           command: [ "bash", "-c"]
+          ports:
+            - containerPort: 4000
+            - containerPort: 13000
+              protocol: TCP
           args:
           # sleep forever, must attach manually to operate!
           - tail -f /dev/null

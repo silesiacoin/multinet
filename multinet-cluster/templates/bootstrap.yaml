@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     # force it to node 0 only
-    statefulset.kubernetes.io/pod-name: nimbus-0
+    statefulset.kubernetes.io/pod-name: teku-catalyst-0
   ports:
     - protocol: TCP
-      port: 50000
+      port: 5051

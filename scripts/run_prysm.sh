@@ -39,12 +39,31 @@ bazel run //beacon-chain --define=ssz=$SPEC_VERSION -- \
   --pprof \
   --rpc-host=0.0.0.0 \
   --rpc-port=4000 \
+  --http-web3provider=https://rpc.l14.lukso.network/ \
   --verbosity=debug \
   --interop-eth1data-votes \
   --chain-config-file=$TESTNET_DIR/config.yaml \
-  --contract-deployment-block=0 \
-  --deposit-contract=0x8A04d14125D0FDCDc742F4A05C051De07232EDa4 \
-  --interop-genesis-state=$TESTNET_DIR/genesis.ssz &
+  --l14 \
+  --deposit-contract=0xEEBbf8e25dB001f4EC9b889978DC79B302DF9Efd \
+  --interop-genesis-state=$TESTNET_DIR/genesis.ssz \
+  --accept-terms-of-use &
+
+sleep 5
+
+WALLET_DIR=$PRY_DATADIR/prysm/wallets
+
+mkdir -p $WALLET_DIR
+
+if [[ ! -f $WALLET_DIR/password.txt ]]; then
+  apt install -y pwgen
+  pwgen -B 24 -c 1 -y -n > $WALLET_DIR/password.txt
+  bazel run //validator -- \
+    wallet create \
+    --wallet-dir=$WALLET_DIR \
+    --keymanager-kind=derived \
+    --wallet-password-file=$WALLET_DIR/password.txt \
+    --skip-mnemonic-25th-word-check=false
+fi
 
 sleep 5
 
@@ -52,6 +71,11 @@ bazel run //validator --define=ssz=$SPEC_VERSION -- \
   --chain-config-file=$TESTNET_DIR/config.yaml \
   --disable-accounts-v2=true \
   --verbosity=debug \
-  --password="" \
-  --keymanager=wallet \
-  --keymanageropts=$PRY_DATADIR/prysm/keymanager_opts.json
+  --accept-terms-of-use \
+  --wallet-dir=$WALLET_DIR
+
+while true
+do
+	echo ""
+	sleep 1
+done

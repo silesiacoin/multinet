@@ -1,0 +1,154 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: teku-catalyst
+  labels:
+    app: multinet
+    tier: teku-catalyst
+spec:
+  replicas: {{ .Values.TEKU_CATALYST_NODES }}
+  serviceName: teku-catalyst
+  selector:
+    matchLabels:
+      tier: teku-catalyst
+  template:
+    metadata:
+      generateName: teku-catalyst-
+      labels:
+        tier: teku-catalyst
+    spec:
+      volumes:
+        - name: deposits
+          persistentVolumeClaim:
+            claimName: deposits-storage
+        - name: common-data
+          persistentVolumeClaim:
+            claimName: common-data
+      containers:
+        - name: catalyst
+          image: silesiacoin/ssc20-client:v002
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /root/multinet/repo/deposits
+              name: deposits
+            - mountPath: /root/multinet/repo/data
+              name: common-data
+          command: [ "bash", "-c" ]
+          ports:
+            - containerPort: 8545
+            - containerPort: 30303
+          args:
+            - echo $CATALYST_INIT_SCRIPT; echo $CATALYST_INIT_SCRIPT > /root/multinet/repo/catalystB64.sh; base64 -d /root/multinet/repo/catalystB64.sh > /root/multinet/repo/catalyst.sh; chmod +x /root/multinet/repo/catalyst.sh; MULTINET_POD_NAME=$MULTINET_POD_NAME MULTINET_POD_IP=$MULTINET_POD_IP /root/multinet/repo/catalyst.sh
+          terminationMessagePolicy: FallbackToLogsOnError
+          # inject environment variables
+          env:
+            - name: MULTINET_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MULTINET_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: CATALYST_STATS_LOGIN_SECRET
+              value: "{{ .Values.CATALYST_STATS_LOGIN_SECRET }}"
+            - name: CATALYST_STATS_HOST
+              value: "{{ .Values.CATALYST_STATS_HOST }}"
+            - name: CATALYST_INIT_SCRIPT
+              value: {{ .Files.Get "catalyst.sh" | b64enc }}
+        - name: teku
+          image: silesiacoin/ssc20-client:v002
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /root/multinet/repo/deposits
+              name: deposits
+            - mountPath: /root/multinet/repo/data
+              name: common-data
+          command: [ "bash", "-c" ]
+          ports:
+            - containerPort: 9000
+            - containerPort: 4000
+            - containerPort: 5051
+          args:
+            - echo $TEKU_INIT_SCRIPT > /root/multinet/repo/tekuB64.sh; base64 -d /root/multinet/repo/tekuB64.sh > /root/multinet/repo/teku.sh; chmod +x /root/multinet/repo/teku.sh; INTEROP_OWNED_VALIDATOR_COUNT=$INTEROP_OWNED_VALIDATOR_COUNT MULTINET_POD_NAME=$MULTINET_POD_NAME MULTINET_POD_IP=$MULTINET_POD_IP TEKU_BOOTNODE_ENR=$TEKU_BOOTNODE_ENR /root/multinet/repo/teku.sh
+          env:
+            - name: INTEROP_OWNED_VALIDATOR_COUNT
+              value: "{{ .Values.INTEROP_OWNED_VALIDATOR_COUNT }}"
+            - name: TEKU_INIT_SCRIPT
+              value: "{{ .Files.Get "teku.sh" | b64enc }}"
+            - name: MULTINET_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MULTINET_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: TEKU_BOOTNODE_ENR
+              value: "{{ .Values.TEKU_BOOTNODE_ENR }}"
+        - name: eth2stats-client
+          image: silesiacoin/eth2stats-client:v2teku
+          imagePullPolicy: IfNotPresent
+          args: [ "run", "--v", "--eth2stats.node-name", "$(MULTINET_POD_NAME)", "--eth2stats.addr", "eth2stats:9090", "--eth2stats.tls=false", "--beacon.type", "v1", "--beacon.addr", "http://$(MULTINET_POD_IP):5051" ]
+          env:
+            - name: MULTINET_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MULTINET_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+      initContainers:
+        - name: genesis
+          image: silesiacoin/ssc20-client:v002
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /root/multinet/repo/deposits
+              name: deposits
+            - mountPath: /root/multinet/repo/data
+              name: common-data
+          command: [ "bash", "-c" ]
+          args:
+            - echo $GENESIS_INIT_SCRIPT > /root/multinet/repo/genesisB64.sh; base64 -d /root/multinet/repo/genesisB64.sh > /root/multinet/repo/genesis.sh; chmod +x /root/multinet/repo/genesis.sh; MULTINET_POD_NAME=$MULTINET_POD_NAME MULTINET_POD_IP=$MULTINET_POD_IP GENESIS_BODY=$GENESIS_BODY STATIC_NODES=$STATIC_NODES GENESIS_TIME=$GENESIS_TIME ETH_1_BLOCK_HASH=$ETH_1_BLOCK_HASH ETH2_VALIDATORS=$ETH2_VALIDATORS /root/multinet/repo/genesis.sh
+          # inject environment variables
+          env:
+            - name: MULTINET_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MULTINET_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            # Genesis parameters
+            - name: NIMBUS_NODES
+              value: "{{ .Values.NIMBUS_NODES }}"
+            - name: NIMBUS_DEV_NODES
+              value: "{{ .Values.NIMBUS_DEV_NODES }}"
+            - name: NIMBUS_VALIDATORS
+              value: "{{ .Values.NIMBUS_VALIDATORS }}"
+            - name: LIGHTHOUSE_NODES
+              value: "{{ .Values.LIGHTHOUSE_NODES }}"
+            - name: LIGHTHOUSE_DEV_NODES
+              value: "{{ .Values.LIGHTHOUSE_DEV_NODES }}"
+            - name: LIGHTHOUSE_VALIDATORS
+              value: "{{ .Values.LIGHTHOUSE_VALIDATORS }}"
+            - name: PRYSM_NODES
+              value: "{{ .Values.PRYSM_NODES }}"
+            - name: PRYSM_DEV_NODES
+              value: "{{ .Values.PRYSM_DEV_NODES }}"
+            - name: PRYSM_VALIDATORS
+              value: "{{ .Values.PRYSM_VALIDATORS }}"
+            - name: GENESIS_BODY
+              value: {{ .Files.Get "genesis.json" | toJson }}
+            - name: ETH_1_BLOCK_HASH
+              value: "{{ .Values.ETH_1_BLOCK_HASH }}"
+            - name: STATIC_NODES
+              value: {{ .Files.Get "static-nodes.json" | toJson }}
+            - name: GENESIS_INIT_SCRIPT
+              value: {{ .Files.Get "genesis.sh" | b64enc  }}
+            - name: GENESIS_TIME
+              value: "{{ .Values.ETH_2_GENESIS_TIME }}"
+            - name: ETH2_VALIDATORS
+              value: "{{ .Values.ETH_2_VALIDATORS }}"

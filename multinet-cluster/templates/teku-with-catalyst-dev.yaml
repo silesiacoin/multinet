@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: nimbus
+  name: teku-catalyst-dev
   labels:
     app: multinet
-    tier: nimbus
+    tier: teku-catalyst-dev
 spec:
-  replicas: {{ .Values.NIMBUS_NODES }}
-  serviceName: nimbus
+  replicas: {{ .Values.TEKU_CATALYST_NODES_DEV }}
+  serviceName: teku-catalyst
   selector:
     matchLabels:
-      tier: nimbus
+      tier: teku-catalyst
   template:
     metadata:
-      generateName: nimbus-
+      generateName: teku-catalyst-
       labels:
-        tier: nimbus
+        tier: teku-catalyst
     spec:
       volumes:
         - name: deposits
@@ -25,20 +25,20 @@ spec:
           persistentVolumeClaim:
             claimName: common-data
       containers:
-        - name: nimbus
-          image: eth2clients/multinet-nimbus
+        - name: catalyst
+          image: silesiacoin/ssc20-client:v001
           imagePullPolicy: IfNotPresent
           volumeMounts:
-          - mountPath: /root/multinet/repo/deposits
-            name: deposits
-          - mountPath: /root/multinet/repo/data
-            name: common-data
-          ports:
-          - containerPort: 50000
+            - mountPath: /root/multinet/repo/deposits
+              name: deposits
+            - mountPath: /root/multinet/repo/data
+              name: common-data
           command: [ "bash", "-c"]
+          ports:
+            - containerPort: 8545
+            - containerPort: 30303
           args:
-          # If we are 0 just run, we bootstrap
-          - if [[ $MULTINET_POD_NAME != "nimbus-0" ]]; then ./wait_for.sh -t 0 bootstrap:50000 -- ./run_nimbus.sh; else ./run_nimbus.sh; fi
+            - tail -f /dev/null
           # inject environment variables
           env:
             - name: MULTINET_POD_NAME
@@ -49,12 +49,21 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-            - name: LOG_LEVEL
-              value: "{{ .Values.NIMBUS_LOG_LEVEL }}"
-        - name: eth2stats-client
-          image: eth2clients/eth2stats-client
+        - name: teku
+          image: silesiacoin/ssc20-client:v001
           imagePullPolicy: IfNotPresent
-          args: ["run", "--v", "--eth2stats.node-name", "$(MULTINET_POD_NAME)", "--eth2stats.addr", "eth2stats:9090", "--eth2stats.tls=false", "--beacon.type", "nimbus", "--beacon.addr", "http://$(MULTINET_POD_IP):7000"]
+          volumeMounts:
+            - mountPath: /root/multinet/repo/deposits
+              name: deposits
+            - mountPath: /root/multinet/repo/data
+              name: common-data
+          command: [ "bash", "-c"]
+          ports:
+            - containerPort: 9000
+            - containerPort: 4000
+            - containerPort: 5051
+          args:
+            - tail -f /dev/null
           env:
             - name: MULTINET_POD_NAME
               valueFrom:
@@ -66,16 +75,16 @@ spec:
                   fieldPath: status.podIP
       initContainers:
         - name: genesis
-          image: silesiacoin/multinet-nimbus:l14-v0.02
+          image: silesiacoin/ssc20-client:v001
           imagePullPolicy: IfNotPresent
           volumeMounts:
-          - mountPath: /root/multinet/repo/deposits
-            name: deposits
-          - mountPath: /root/multinet/repo/data
-            name: common-data
-          command: [ "bash", "-c"]
+            - mountPath: /root/multinet/repo/deposits
+              name: deposits
+            - mountPath: /root/multinet/repo/data
+              name: common-data
+          command: [ "bash", "-c" ]
           args:
-          - if [[ $MULTINET_POD_NAME == "nimbus-0" ]]; then ./make_genesis.sh; else ./wait_for.sh -t 0 bootstrap:50000 -- echo "Done"; fi
+            - rm -rf /root/multinet/repo/data/$(MULTINET_POD_NAME); mkdir -p /root/multinet/repo/data/$(MULTINET_POD_NAME); ./teku/bin/teku genesis mock --output-file /root/multinet/repo/data/testnet/genesis.ssz --eth1-block-hash $ETH_1_BLOCK_HASH; echo "$GENESIS_BODY" > /root/multinet/repo/data/testnet/genesis.json; echo "STATIC_NODES" > /root/multinet/repo/data/$(MULTINET_POD_NAME)/static-nodes.json; echo "STATIC_NODES" > /root/multinet/repo/data/$(MULTINET_POD_NAME)/trusted-nodes.json;
           # inject environment variables
           env:
             - name: MULTINET_POD_NAME
@@ -105,3 +114,9 @@ spec:
               value: "{{ .Values.PRYSM_DEV_NODES }}"
             - name: PRYSM_VALIDATORS
               value: "{{ .Values.PRYSM_VALIDATORS }}"
+            - name: GENESIS_BODY
+              value: {{ .Files.Get "genesis.json" | toJson }}
+            - name: ETH_1_BLOCK_HASH
+              value: "{{ .Values.ETH_1_BLOCK_HASH }}"
+            - name: STATIC_NODES
+              value: {{ .Files.Get "static_nodes.json" | toJson }}

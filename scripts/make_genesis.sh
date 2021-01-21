@@ -18,6 +18,8 @@ FORK_VERSION=0x00000000
 DEPOSIT_AMOUNT=32000000000
 WITHDRAWALS_MNEMONIC="enough animal salon barrel poet method husband evidence grain excuse grass science there wedding blind glimpse surge loan reopen chalk toward change survey bag"
 VALIDATORS_MNEMONIC="stay depend ignore lady access will dress idea hybrid tube original riot between plate ethics ecology green response hollow famous salute they warrior little"
+# Assign default network id if not set
+NETWORK_ID=${NETWORK_ID:=4004180}
 
 rm -rf /root/multinet/repo/deposits
 mkdir -p /root/multinet/repo/deposits
@@ -244,6 +246,8 @@ $NIMBUS_BIN \
   --deposits-file=$DEPOSITS_DIR/deposits.json \
   --total-validators=$NUM_VALIDATORS \
   --output-genesis="${TESTNET_DIR}/genesis.ssz" \
+  --netkey-file="${TESTNET_DIR}/network_key.json" \
+  --insecure-netkey-password=true \
   --output-bootstrap-file="${TESTNET_DIR}/bootstrap_nodes.txt" \
   --bootstrap-address=$IP_ADDRESS \
   --bootstrap-port=50000 \

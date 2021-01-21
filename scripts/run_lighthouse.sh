@@ -45,41 +45,17 @@ fi
 
 set -x # print commands
 
-# import accounts
-echo "password1234" | target/release/lighthouse \
-  account validator import \
-  --datadir $LH_DATADIR \
-  --directory $LH_VALIDATORS_DIR \
-  --reuse-password \
-  --stdin-inputs
-
 # beacon node
 target/release/lighthouse \
   bn \
-  --debug-level debug \
-  --datadir $LH_DATADIR \
-  --testnet-dir $TESTNET_DIR \
+	--debug-level debug \
+	--datadir $LH_DATADIR \
+  --network mainnet \
   --dummy-eth1 \
-  --spec $SPEC_VERSION \
   --http-address "0.0.0.0" \
   --http-port 5052 \
   --port 50001 \
   --enr-address $MULTINET_POD_NAME \
   --enr-udp-port 50001 \
   --http \
-  $BOOTNODES_ARG &
-
-sleep 5
-
-rm $LH_DATADIR/validators/validator_key_cache.json.lock || true
-
-# validator client
-echo "password1234" | target/release/lighthouse \
-  vc \
-  --debug-level debug \
-  --spec $SPEC_VERSION \
-  --datadir $LH_DATADIR \
-  --testnet-dir $TESTNET_DIR \
-  --allow-unsynced
-
-set +x
+  $BOOTNODES_ARG
