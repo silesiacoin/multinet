@@ -2,5 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/eth2stats/eth2stats-client" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/eth2stats/eth2stats-dashboard" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/eth2stats/eth2stats-server" vcs="Git" />
   </component>
 </project>

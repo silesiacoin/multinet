@@ -64,6 +64,3 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-          volumeMounts:
-            - mountPath: /root/multinet/postgresql/data
-              name: common-data
