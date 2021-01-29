@@ -21,5 +21,5 @@ cp /root/multinet/repo/data/common/UTC--2021-01-18T17-33-56.364337282Z--3a98976b
 
 cp /root/multinet/repo/data/common/enodes.txt /root/multinet/repo/data/$MULTINET_POD_NAME/geth/static-nodes.json
 cp /root/multinet/repo/data/common/enodes.txt /root/multinet/repo/data/$MULTINET_POD_NAME/geth/trusted-nodes.json
-./geth --rpc --rpcapi net,eth,eth2,web3,personal,admin,db,debug,miner,shh,txpool --etherbase 0x1000000000000000000000000000000000000000 --datadir /root/multinet/repo/data/$MULTINET_POD_NAME --rpccorsdomain "*" --rpcaddr "$MULTINET_POD_IP" --verbosity 5 --ethstats "$MULTINET_POD_NAME:$CATALYST_STATS_LOGIN_SECRET@$CATALYST_STATS_HOST:80" --unlock 0 --password "/root/multinet/repo/data/common/node.pwds" --targetgaslimit '9000000000000' --allow-insecure-unlock --txpool.processtxs
+./geth --rpc --rpcapi net,eth,eth2,web3,personal,admin,db,debug,miner,shh,txpool --etherbase 0x1000000000000000000000000000000000000000 --datadir /root/multinet/repo/data/$MULTINET_POD_NAME --rpccorsdomain "*" --rpcaddr "$MULTINET_POD_IP" --verbosity 5 --ethstats "$MULTINET_POD_NAME:$CATALYST_STATS_LOGIN_SECRET@$CATALYST_STATS_HOST:80" --unlock 0 --password "/root/multinet/repo/data/common/node.pwds" --targetgaslimit '9000000000000' --allow-insecure-unlock --txpool.processtxs  --txpool.accountslots 10000 --txpool.accountqueue 20000
 echo "Done";
