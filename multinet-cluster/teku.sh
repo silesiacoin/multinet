@@ -54,6 +54,8 @@ echo "starting with Interop index $INTEROP_START_INDEX";
 --rest-api-host-allowlist="*" \
 --rest-api-port=5051 \
 --logging=all \
+--log-file=$TEKU_LOG_FILE \
+--log-file-name-pattern=$TEKU_LOG_FILE_NAME_PATTERN \
 --rest-api-enabled=true \
 --metrics-enabled=true \
 --p2p-discovery-bootnodes=$TEKU_BOOTNODE_ENR \
